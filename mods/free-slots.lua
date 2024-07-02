@@ -6,7 +6,7 @@ local module = ShaguTweaks:register({
     description = T["Adds a free slots count to the backpack button. The top right count shows free class bag slots, the bottom left count shows free reagent bag slots and the bottom right count shows the remaining free bag slots."],
     expansions = { ["vanilla"] = true, ["tbc"] = nil },
     category = T["Tooltip & Items"],
-    enabled = nil,
+    enabled = true,
 })
 
 module.enable = function(self)
