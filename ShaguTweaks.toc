@@ -78,3 +78,8 @@ mods\cooldown-numbers.lua
 mods\turtle-wow.lua
 mods\superwow.lua
 mods\reduced-actionbar.lua
+mods\classic-numbers.lua
+mods\actionbar-quick-actions.lua
+mods\actionbar-reagent-count.lua
+mods\free-slots.lua
+mods\unitframes-energy-tick.lua
