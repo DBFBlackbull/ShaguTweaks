@@ -7,7 +7,7 @@ local module = ShaguTweaks:register({
   description = T["Shows the vendor sell values on all item tooltips."],
   expansions = { ["vanilla"] = true, ["tbc"] = true },
   category = T["Tooltip & Items"],
-  enabled = true,
+  enabled = false,
 })
 
 local data = {

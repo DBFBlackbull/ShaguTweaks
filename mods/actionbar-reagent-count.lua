@@ -6,7 +6,7 @@ local module = ShaguTweaks:register({
     description = T["Show the reagent count on action buttons."],
     expansions = { ["vanilla"] = true, ["tbc"] = nil },
     category = T["Action Bar"],
-    enabled = nil,
+    enabled = true,
 })
 
 module.enable = function(self)

@@ -9,7 +9,7 @@ local module = ShaguTweaks:register({
   description = T["Show item rarity as the border color on bags, bank, character and inspect frames."],
   expansions = { ["vanilla"] = true, ["tbc"] = true },
   category = T["Tooltip & Items"],
-  enabled = true,
+  enabled = nil,
 })
 
 local defcolor = {}
