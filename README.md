@@ -7,6 +7,9 @@ Added the following mods from https://github.com/GryllsAddons/ShaguTweaks-mods
 
 - **Actionbar quick action**  
   *Activates abilities on key down instead of key up*
+
+- **Actionbar reagent count**
+  *Shows how mant reagents you have for a given spell*
   
 - **Unit frame energy ticks**  
   *Shows energy and mana ticks and the 5 second rule*
