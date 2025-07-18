@@ -6,7 +6,7 @@ local module = ShaguTweaks:register({
   description = T["Player and Target unit frames can be moved while <Shift> and <Ctrl> are pressed together."],
   expansions = { ["vanilla"] = true, ["tbc"] = true },
   category = T["Unit Frames"],
-  enabled = nil,
+  enabled = true,
 })
 
 local movables = { "PlayerFrame", "TargetFrame" }
@@ -14,6 +14,10 @@ local movables = { "PlayerFrame", "TargetFrame" }
 module.enable = function(self)
   local unlocker = CreateFrame("Frame", nil, UIParent)
   unlocker:SetAllPoints(UIParent)
+
+  for _, frame in pairs(movables) do
+    _G[frame]:SetClampedToScreen(true)
+  end
 
   unlocker.movable = nil
   unlocker:SetScript("OnUpdate", function()

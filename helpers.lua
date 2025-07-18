@@ -145,13 +145,15 @@ end
 local capture_cache = {}
 ShaguTweaks.GetCaptures = function(pat)
   local r = capture_cache
+
   if not r[pat] then
     for a, b, c, d, e in gfind(gsub(pat, "%((.+)%)", "%1"), gsub(pat, "%d%$", "%%(.-)$")) do
       r[pat] = { a, b, c, d, e}
     end
+
+    r[pat] = r[pat] or {}
   end
 
-  if not r[pat] then return nil, nil, nil, nil end
   return r[pat][1], r[pat][2], r[pat][3], r[pat][4], r[pat][5]
 end
 
@@ -170,7 +172,6 @@ ShaguTweaks.cmatch = function(str, pat)
 
   return ra, rb, rc, rd, re
 end
-
 
 local timer
 ShaguTweaks.QueueFunction = function(a1,a2,a3,a4,a5,a6,a7,a8,a9)
@@ -232,7 +233,7 @@ end
 
 local border = {
   edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-  tile = true, tileSize = 8, edgeSize = 12,
+  tile = true, tileSize = 8, edgeSize = 16,
   insets = { left = 0, right = 0, top = 0, bottom = 0 }
 }
 ShaguTweaks.AddBorder = function(frame, inset, color)
@@ -337,4 +338,25 @@ end
 
 ShaguTweaks.spairs = function(t)
   return orderedNext, t, nil
+end
+
+ShaguTweaks.GetItemCount = function(itemName)
+  local count = 0
+  for bag = 4, 0, -1 do
+    for slot = 1, GetContainerNumSlots(bag) do
+      local _, itemCount = GetContainerItemInfo(bag, slot)
+      if itemCount then
+        local itemLink = GetContainerItemLink(bag,slot)
+        local _, _, itemParse = strfind(itemLink, "(%d+):")
+        local queryName = GetItemInfo(itemParse)
+        if queryName and queryName ~= "" then
+          if queryName == itemName then
+            count = count + itemCount
+          end
+        end
+      end
+    end
+  end
+
+  return count
 end

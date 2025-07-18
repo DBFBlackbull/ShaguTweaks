@@ -10,6 +10,48 @@ local module = ShaguTweaks:register({
 })
 
 module.enable = function(self)
+  local sides = { "Left", "Right" }
+
+  local function AddHeader(tooltip)
+    local name = tooltip:GetName()
+
+    -- shift all entries one line down
+    for i=tooltip:NumLines(), 1, -1 do
+      for _, side in pairs(sides) do
+        local current = _G[name.."Text"..side..i]
+        local below = _G[name.."Text"..side..i+1]
+
+        if current and current:IsShown() then
+          local text = current:GetText()
+          local r, g, b = current:GetTextColor()
+
+          if text and text ~= "" then
+            if tooltip:NumLines() < i+1 then
+              -- add new line if required
+              tooltip:AddLine(text, r, g, b, true)
+            else
+              -- update existing lines
+              below:SetText(text)
+              below:SetTextColor(r, g, b)
+              below:Show()
+
+              -- hide processed line
+              current:Hide()
+            end
+          end
+        end
+      end
+    end
+
+    -- add label to first line
+    _G[name.."TextLeft1"]:SetTextColor(.5, .5, .5, 1)
+    _G[name.."TextLeft1"]:SetText(CURRENTLY_EQUIPPED)
+    _G[name.."TextLeft1"]:Show()
+
+    -- update tooltip sizes
+    tooltip:Show()
+  end
+
   local itemtypes = {
     ["deDE"] = {
       ["INVTYPE_WAND"] = "Zauberstab",
@@ -64,9 +106,9 @@ module.enable = function(self)
 
   -- set globals for all inventory types
   for key, value in pairs(itemtypes[GetLocale()]) do setglobal(key, value) end
-  INVTYPE_WEAPON_OTHER = INVTYPE_WEAPON.."_other";
-  INVTYPE_FINGER_OTHER = INVTYPE_FINGER.."_other";
-  INVTYPE_TRINKET_OTHER = INVTYPE_TRINKET.."_other";
+  INVTYPE_WEAPON_OTHER = INVTYPE_WEAPON.."_other"
+  INVTYPE_FINGER_OTHER = INVTYPE_FINGER.."_other"
+  INVTYPE_TRINKET_OTHER = INVTYPE_TRINKET.."_other"
 
   local slots = {
     [INVTYPE_2HWEAPON] = "MainHandSlot",
@@ -102,6 +144,9 @@ module.enable = function(self)
     [INVTYPE_THROWN] = "RangedSlot",
   }
 
+  ShoppingTooltip1:SetClampedToScreen(true)
+  ShoppingTooltip2:SetClampedToScreen(true)
+
   local function ShowCompare(tooltip)
     -- abort if shift is not pressed
     if not IsShiftKeyDown() then
@@ -119,31 +164,37 @@ module.enable = function(self)
 
           -- determine screen part
           local x = GetCursorPosition() / UIParent:GetEffectiveScale()
-          local anchor = x < GetScreenWidth() / 2 and "BOTTOMLEFT" or "BOTTOMRIGHT"
-          local relative = x < GetScreenWidth() / 2 and "BOTTOMRIGHT" or "BOTTOMLEFT"
+          local anchor = x < GetScreenWidth() / 2 and "TOPLEFT" or "TOPRIGHT"
+          local relative = x < GetScreenWidth() / 2 and "TOPRIGHT" or "TOPLEFT"
 
           -- overwrite position for tooltips without owner
           local pos, parent = tooltip:GetPoint()
-          if parent and parent == UIParent and pos == "BOTTOMRIGHT" then
-            anchor = "BOTTOMRIGHT"
-            relative = "BOTTOMLEFT"
+          if parent and parent == UIParent and pos == "TOPRIGHT" then
+            anchor = "TOPRIGHT"
+            relative = "TOPLEFT"
           end
 
           -- first tooltip
-          ShoppingTooltip1:SetOwner(tooltip, "ANCHOR_NONE");
-          ShoppingTooltip1:ClearAllPoints();
-          ShoppingTooltip1:SetPoint(anchor, tooltip, relative, 0, 0);
+          ShoppingTooltip1:SetOwner(tooltip, "ANCHOR_NONE")
+          ShoppingTooltip1:ClearAllPoints()
+          ShoppingTooltip1:SetPoint(anchor, tooltip, relative, 0, 0)
           ShoppingTooltip1:SetInventoryItem("player", slotID)
           ShoppingTooltip1:Show()
+          AddHeader(ShoppingTooltip1)
 
           -- second tooltip
           if slots[slotType .. "_other"] then
             local slotID_other = GetInventorySlotInfo(slots[slotType .. "_other"])
-            ShoppingTooltip2:SetOwner(tooltip, "ANCHOR_NONE");
-            ShoppingTooltip2:ClearAllPoints();
-            ShoppingTooltip2:SetPoint(anchor, ShoppingTooltip1, relative, 0, 0);
+            ShoppingTooltip2:SetOwner(tooltip, "ANCHOR_NONE")
+            ShoppingTooltip2:ClearAllPoints()
+            if ShoppingTooltip1:IsShown() then
+                ShoppingTooltip2:SetPoint(anchor, ShoppingTooltip1, relative, 0, 0)
+            else
+                ShoppingTooltip2:SetPoint(anchor, tooltip, relative, 0, 0)
+            end
             ShoppingTooltip2:SetInventoryItem("player", slotID_other)
-            ShoppingTooltip2:Show();
+            ShoppingTooltip2:Show()
+            AddHeader(ShoppingTooltip2)
           end
         end
       end
@@ -161,6 +212,7 @@ module.enable = function(self)
     local atlas = CreateFrame("Frame", nil, AtlasLootTooltip)
     atlas:SetScript("OnUpdate", function()
       ShowCompare(AtlasLootTooltip)
+      ShowCompare(AtlasLootTooltip2)
     end)
   end)
 end
