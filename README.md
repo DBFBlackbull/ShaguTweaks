@@ -17,7 +17,7 @@ Added the following mods from https://github.com/GryllsAddons/ShaguTweaks-mods
 Added the following mod myself
 
 - **Classic Numbers**  
-  *Shows both health and mana percentange and real numbers on the unit frames similar to how it is shown on the 1.14 client*
+  *Shows both health and mana percentage and real numbers on the unit frames similar to how it is shown on the 1.14 client*
 
 - Changed SavedVariables to be per account instead of per character
 
