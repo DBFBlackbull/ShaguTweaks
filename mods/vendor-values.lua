@@ -3941,80 +3941,85 @@ module.enable = function(self)
     return HookSetInboxItem(self, mailID, attachmentIndex)
   end
 
-  local HookSetInventoryItem = GameTooltip.SetInventoryItem
-  function GameTooltip.SetInventoryItem(self, unit, slot)
+  --local HookSetInventoryItem = GameTooltip.SetInventoryItem
+  --function GameTooltip.SetInventoryItem(self, unit, slot)
+  --  GameTooltip.itemLink = GetInventoryItemLink(unit, slot)
+  --  GameTooltip.ignoreMerchant = true
+  --  return HookSetInventoryItem(self, unit, slot)
+  --end
+
+  ShaguTweaks.hooksecurefunc(GameTooltip, "SetInventoryItem", function(self, unit, slot)
     GameTooltip.itemLink = GetInventoryItemLink(unit, slot)
     GameTooltip.ignoreMerchant = true
-    return HookSetInventoryItem(self, unit, slot)
-  end
+  end)
 
   local HookSetLootRollItem = GameTooltip.SetLootRollItem
   function GameTooltip.SetLootRollItem(self, id)
-    GameTooltip.itemLink = GetLootRollItemLink(id)
-    GameTooltip.ignoreMerchant = true
-    return HookSetLootRollItem(self, id)
+  GameTooltip.itemLink = GetLootRollItemLink(id)
+  GameTooltip.ignoreMerchant = true
+  return HookSetLootRollItem(self, id)
   end
 
   local HookSetMerchantItem = GameTooltip.SetMerchantItem
   function GameTooltip.SetMerchantItem(self, merchantIndex)
-    GameTooltip.itemLink = GetMerchantItemLink(merchantIndex)
-    GameTooltip.ignoreMerchant = false
-    return HookSetMerchantItem(self, merchantIndex)
+  GameTooltip.itemLink = GetMerchantItemLink(merchantIndex)
+  GameTooltip.ignoreMerchant = false
+  return HookSetMerchantItem(self, merchantIndex)
   end
 
   local HookSetCraftItem = GameTooltip.SetCraftItem
   function GameTooltip.SetCraftItem(self, skill, slot)
-    GameTooltip.itemLink = GetCraftReagentItemLink(skill, slot)
-    GameTooltip.ignoreMerchant = true
-    return HookSetCraftItem(self, skill, slot)
+  GameTooltip.itemLink = GetCraftReagentItemLink(skill, slot)
+  GameTooltip.ignoreMerchant = true
+  return HookSetCraftItem(self, skill, slot)
   end
 
   local HookSetCraftSpell = GameTooltip.SetCraftSpell
   function GameTooltip.SetCraftSpell(self, slot)
-    GameTooltip.itemLink = GetCraftItemLink(slot)
-    GameTooltip.ignoreMerchant = true
-    return HookSetCraftSpell(self, slot)
+  GameTooltip.itemLink = GetCraftItemLink(slot)
+  GameTooltip.ignoreMerchant = true
+  return HookSetCraftSpell(self, slot)
   end
 
   local HookSetTradeSkillItem = GameTooltip.SetTradeSkillItem
   function GameTooltip.SetTradeSkillItem(self, skillIndex, reagentIndex)
-    if reagentIndex then
-      GameTooltip.itemLink = GetTradeSkillReagentItemLink(skillIndex, reagentIndex)
-    else
-      GameTooltip.itemLink = GetTradeSkillItemLink(skillIndex)
-    end
-    GameTooltip.ignoreMerchant = true
-    return HookSetTradeSkillItem(self, skillIndex, reagentIndex)
+  if reagentIndex then
+  GameTooltip.itemLink = GetTradeSkillReagentItemLink(skillIndex, reagentIndex)
+  else
+  GameTooltip.itemLink = GetTradeSkillItemLink(skillIndex)
+  end
+  GameTooltip.ignoreMerchant = true
+  return HookSetTradeSkillItem(self, skillIndex, reagentIndex)
   end
 
   local HookSetAuctionItem = GameTooltip.SetAuctionItem
   function GameTooltip.SetAuctionItem(self, atype, index)
-    _, _, GameTooltip.itemCount = GetAuctionItemInfo(atype, index)
-    GameTooltip.itemLink = GetAuctionItemLink(atype, index)
-    GameTooltip.ignoreMerchant = true
-    return HookSetAuctionItem(self, atype, index)
+  _, _, GameTooltip.itemCount = GetAuctionItemInfo(atype, index)
+  GameTooltip.itemLink = GetAuctionItemLink(atype, index)
+  GameTooltip.ignoreMerchant = true
+  return HookSetAuctionItem(self, atype, index)
   end
 
   local HookSetAuctionSellItem = GameTooltip.SetAuctionSellItem
   function GameTooltip.SetAuctionSellItem(self)
-    local itemName, _, itemCount = GetAuctionSellItemInfo()
-    GameTooltip.itemCount = itemCount
-    GameTooltip.itemLink = GetItemLinkByName(itemName)
-    GameTooltip.ignoreMerchant = true
-    return HookSetAuctionSellItem(self)
+  local itemName, _, itemCount = GetAuctionSellItemInfo()
+  GameTooltip.itemCount = itemCount
+  GameTooltip.itemLink = GetItemLinkByName(itemName)
+  GameTooltip.ignoreMerchant = true
+  return HookSetAuctionSellItem(self)
   end
 
   local HookSetTradePlayerItem = GameTooltip.SetTradePlayerItem
   function GameTooltip.SetTradePlayerItem(self, index)
-    GameTooltip.itemLink = GetTradePlayerItemLink(index)
-    GameTooltip.ignoreMerchant = true
-    return HookSetTradePlayerItem(self, index)
+  GameTooltip.itemLink = GetTradePlayerItemLink(index)
+  GameTooltip.ignoreMerchant = true
+  return HookSetTradePlayerItem(self, index)
   end
 
   local HookSetTradeTargetItem = GameTooltip.SetTradeTargetItem
   function GameTooltip.SetTradeTargetItem(self, index)
-    GameTooltip.itemLink = GetTradeTargetItemLink(index)
-    GameTooltip.ignoreMerchant = true
-    return HookSetTradeTargetItem(self, index)
+  GameTooltip.itemLink = GetTradeTargetItemLink(index)
+  GameTooltip.ignoreMerchant = true
+  return HookSetTradeTargetItem(self, index)
   end
-end
+  end

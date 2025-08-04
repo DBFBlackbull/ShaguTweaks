@@ -105,7 +105,6 @@ ShaguTweaks.hooksecurefunc = function(tbl, name, func, prepend)
     hooks[tostring(func)]["function"] = function(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
       local r1, r2, r3, r4, r5, r6, r7, r8, r9, r10 = hooks[tostring(func)]["old"](a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
       hooks[tostring(func)]["new"](a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
-
       return r1, r2, r3, r4, r5, r6, r7, r8, r9, r10
     end
   end
@@ -298,19 +297,18 @@ ShaguTweaks.TimeConvert = function(remaining)
 end
 
 -- http://lua-users.org/wiki/SortedIteration
-local function __genOrderedIndex( t )
+local function __genOrderedIndex(t, sortFunc)
   local orderedIndex = {}
   for key in pairs(t) do
     table.insert( orderedIndex, key )
   end
-  table.sort( orderedIndex )
+  table.sort(orderedIndex, sortFunc)
   return orderedIndex
 end
 
 local function orderedNext(t, state)
   local key = nil
   if state == nil then
-    t.__orderedIndex = __genOrderedIndex( t )
     key = t.__orderedIndex[1]
   else
     for i = 1,table.getn(t.__orderedIndex) do
@@ -328,7 +326,8 @@ local function orderedNext(t, state)
   return
 end
 
-ShaguTweaks.spairs = function(t)
+ShaguTweaks.spairs = function(t, sortFunc)
+  t.__orderedIndex = __genOrderedIndex(t, sortFunc)
   return orderedNext, t, nil
 end
 
