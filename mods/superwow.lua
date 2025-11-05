@@ -24,14 +24,17 @@ module.enable = function(self)
   local unitcast = CreateFrame("Frame")
   unitcast:RegisterEvent("UNIT_CASTEVENT")
   unitcast:SetScript("OnEvent", function()
-    if arg3 == "START" or arg3 == "CAST" or arg3 == "CHANNEL" then
-      -- human readable argument list
-      local guid = arg1
-      local target = arg2
-      local event_type = arg3
-      local spell_id = arg4
-      local timer = arg5
-      local start = GetTime()
+    -- human readable argument list
+    local guid = arg1
+    local target = arg2
+    local event_type = arg3
+    local spell_id = arg4
+    local cast_time = arg5
+
+    if event_type == "START" or event_type == "CAST" or event_type == "CHANNEL" then
+      if cast_time == 0 then
+        return
+      end
 
       -- get spell info from spell id
       local spell, icon, _
@@ -48,14 +51,13 @@ module.enable = function(self)
       libcast.db[guid].cast = spell
       libcast.db[guid].rank = nil
       libcast.db[guid].start = GetTime()
-      libcast.db[guid].casttime = timer
+      libcast.db[guid].casttime = cast_time
       libcast.db[guid].icon = icon
       libcast.db[guid].channel = event_type == "CHANNEL" or false
 
       -- write state variable
       ShaguTweaks.superwow_active = true
-    elseif arg3 == "FAIL" then
-      local guid = arg1
+    elseif event_type == "FAIL" then
 
       -- delete all cast entries of guid
       if libcast.db[guid] then
